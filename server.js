@@ -125,6 +125,20 @@ function generatePassword(firstName, lastName) {
         return generatePassword(firstName, lastName);
     }
     
+    // Kiểm tra các yêu cầu
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecial = /[~!@#$%&*]/.test(password);
+    
+    // Đếm số loại ký tự khác nhau
+    const typeCount = [hasUppercase, hasLowercase, hasNumber, hasSpecial].filter(Boolean).length;
+    
+    // Nếu không đáp ứng yêu cầu (ít nhất 3 loại ký tự), tạo lại password
+    if (typeCount < 3) {
+        return generatePassword(firstName, lastName);
+    }
+    
     return password;
 }
 
