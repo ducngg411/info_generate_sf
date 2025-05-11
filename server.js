@@ -204,6 +204,10 @@ app.post('/api/generate-info', async (req, res) => {
                 const firstName = faker.person.firstName();
                 const lastName = faker.person.lastName();
                 
+                // Generate additional random name for additionalInfo
+                const additionalFirstName = faker.person.firstName();
+                const additionalLastName = faker.person.lastName();
+                
                 // Generate random birth date (18-19 years old)
                 const today = new Date();
                 const birthYear = today.getFullYear() - Math.floor(Math.random() * 2) - 18;
@@ -256,7 +260,7 @@ app.post('/api/generate-info', async (req, res) => {
                 // Generate additional email
                 const additionalDomains = ['gmail.com', 'outlook.com'];
                 const domain = additionalDomains[Math.floor(Math.random() * additionalDomains.length)];
-                const additionalEmail = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${faker.number.int({min:100, max:999})}@${domain}`;
+                const additionalEmail = `${additionalFirstName.toLowerCase()}.${additionalLastName.toLowerCase()}${faker.number.int({min:100, max:999})}@${domain}`;
                 
                 const userInfo = {
                     firstName,
@@ -280,8 +284,8 @@ app.post('/api/generate-info', async (req, res) => {
                         id: mailjs.id
                     },
                     additionalInfo: {
-                        firstName,
-                        lastName,
+                        firstName: additionalFirstName,
+                        lastName: additionalLastName,
                         email: additionalEmail
                     }
                 };

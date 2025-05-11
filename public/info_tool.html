@@ -248,10 +248,22 @@
             card.innerHTML = `
                 <h5>Info #${index + 1}</h5>
                 <div class="info-item">
-                    <span class="info-label">Name:</span> 
-                    <span>${info.firstName} ${info.lastName} ${info.suffix ? '(' + info.suffix + ')' : ''}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.firstName} ${info.lastName} ${info.suffix ? '(' + info.suffix + ')' : ''}')">Copy</button>
+                    <span class="info-label">First Name:</span> 
+                    <span>${info.firstName}</span>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.firstName}')">Copy</button>
                 </div>
+                <div class="info-item">
+                    <span class="info-label">Last Name:</span> 
+                    <span>${info.lastName}</span>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.lastName}')">Copy</button>
+                </div>
+                ${info.suffix ? `
+                <div class="info-item">
+                    <span class="info-label">Suffix:</span> 
+                    <span>${info.suffix}</span>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.suffix}')">Copy</button>
+                </div>
+                ` : ''}
                 <div class="info-item">
                     <span class="info-label">Pronoun:</span> 
                     <span>${info.pronoun || ''}</span>
