@@ -26,3 +26,5 @@ logs
 # Build output
 dist/
 build/
+accounts.json
+FullAccountInfo.csv

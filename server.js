@@ -151,7 +151,7 @@ app.post('/api/generate-info', async (req, res) => {
     try {
         const count = req.body.count || 1;
         const results = [];
-        const maxRetries = 2;
+        const maxRetries = 3;
 
         // Helper function to create email with delay and retry
         const createEmailWithDelay = async (retryCount = 0) => {
@@ -428,7 +428,26 @@ app.post('/api/save-account', async (req, res) => {
 
         // Save back to file
         fs.writeFileSync('accounts.json', JSON.stringify(accounts, null, 2));
+
+        // Create or update CSV file
+        const csvFilePath = 'FullAccountInfo.csv';
+        const csvHeader = 'STT,Email,EmailPassword,Student ID,Password,Full Name,Gender,Birthdate,Street,City,State,Zipcode,SSN,Phone\n';
         
+        // Check if CSV file exists
+        let existingContent = '';
+        try {
+            existingContent = fs.readFileSync(csvFilePath, 'utf8');
+        } catch (error) {
+            // If file doesn't exist, create it with header
+            fs.writeFileSync(csvFilePath, csvHeader);
+        }
+
+        // Prepare new row
+        const newRow = `"${sfId}","${info.email}","${info.emailPassword}","${info.password}","${info.firstName} ${info.lastName}","${info.pronoun}","${info.birthDate}","${info.address}","${info.city}","${info.stateName}","${info.zipCode}","${info.ssn}","${info.phone}"\n`;
+
+        // Append new row to file
+        fs.appendFileSync(csvFilePath, newRow);
+
         res.json({ success: true });
     } catch (error) {
         console.error('Error saving account:', error);
