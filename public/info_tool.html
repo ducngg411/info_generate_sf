@@ -5,151 +5,476 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>US Info Generator Tool</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        .info-card {
-            margin-bottom: 32px;
-            border: 1.5px solid #e3e6f0;
-            border-radius: 14px;
-            padding: 24px 20px 18px 20px;
-            background: #fff;
-            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.04);
-            transition: box-shadow 0.2s;
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success-color: #16a34a;
+            --success-hover: #15803d;
+            --danger-color: #dc2626;
+            --danger-hover: #b91c1c;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --border-color: #e5e7eb;
+            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --transition-speed: 0.2s;
         }
-        .info-card:hover {
-            box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+
+        [data-theme="dark"] {
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --success-color: #22c55e;
+            --success-hover: #16a34a;
+            --danger-color: #ef4444;
+            --danger-hover: #dc2626;
+            --text-primary: #f3f4f6;
+            --text-secondary: #d1d5db;
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --border-color: #374151;
+            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
         }
-        .info-card h5 {
-            color: #0d6efd;
-            margin-bottom: 18px;
-            font-size: 1.3em;
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 2rem 1rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: -0.025em;
         }
+
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            z-index: 1000;
+            box-shadow: var(--card-shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-toggle i {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+        }
+
+        .info-card {
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-primary);
+            box-shadow: var(--card-shadow);
+            transition: all var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .info-card h5 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-card h5 i {
+            font-size: 1.2rem;
+        }
+
         .info-item {
-            margin-bottom: 8px;
-            font-size: 1.04em;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 8px;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: background-color var(--transition-speed);
         }
+
+        .info-item:hover {
+            background-color: var(--bg-secondary);
+        }
+
         .info-label {
             font-weight: 600;
-            color: #495057;
-            min-width: 140px;
-            display: inline-block;
+            color: var(--text-secondary);
+            min-width: 160px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
+
+        .info-label i {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
         .copy-btn {
-            padding: 2px 8px;
-            font-size: 0.9em;
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all var(--transition-speed);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-primary);
         }
+
         .copy-btn:hover {
-            background: #e9ecef;
-            border-color: #ced4da;
-        }
-        .copy-btn.copied {
-            background: #198754;
+            background: var(--primary-color);
+            border-color: var(--primary-color);
             color: white;
-            border-color: #198754;
         }
+
+        .copy-btn.copied {
+            background: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+
+        .copy-btn i {
+            font-size: 0.9rem;
+        }
+
         .verification-code {
-            font-size: 1.2em;
-            color: #198754;
-            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--success-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: 0.5rem;
+            margin-top: 1rem;
         }
+
         .loading {
             display: none;
-            margin: 20px 0;
+            margin: 2rem 0;
+            text-align: center;
         }
+
         .loading-spinner {
-            width: 3rem;
-            height: 3rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            color: var(--primary-color);
         }
+
         .progress-container {
-            margin: 20px 0;
+            margin: 2rem 0;
             display: none;
         }
+
+        .progress {
+            height: 0.75rem;
+            background-color: var(--bg-secondary);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
         .progress-status {
-            margin-top: 10px;
-            font-size: 1.1em;
-            color: #0d6efd;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            font-weight: 500;
         }
+
         .progress-error {
-            color: #dc3545;
-            margin-top: 5px;
+            color: var(--danger-color);
+            margin-top: 0.5rem;
+            font-weight: 500;
         }
+
         .progress-success {
-            color: #198754;
-            margin-top: 5px;
+            color: var(--success-color);
+            margin-top: 0.5rem;
+            font-weight: 500;
         }
+
         .additional-section {
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-top: 24px;
-            padding: 18px 16px 12px 16px;
-            box-shadow: 0 1px 6px 0 rgba(0,0,0,0.04);
+            background: var(--bg-secondary);
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            box-shadow: var(--card-shadow);
         }
+
         .additional-section-title {
-            font-weight: bold;
-            color: #0d6efd;
-            font-size: 1.08em;
-            margin-bottom: 10px;
-            letter-spacing: 0.2px;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
+
+        .additional-section-title i {
+            font-size: 1rem;
+        }
+
         .additional-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 18px;
+            gap: 1.25rem;
         }
+
         .additional-col {
-            flex: 1 1 180px;
-            min-width: 140px;
-            font-size: 1em;
-            margin-bottom: 6px;
+            flex: 1 1 200px;
+            min-width: 160px;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg-primary);
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
         }
-        @media (max-width: 600px) {
+
+        .info-card.saved {
+            border-color: var(--success-color);
+            background: var(--bg-primary);
+        }
+
+        .info-card.saved::after {
+            content: '✓ Saved';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--success-color);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .flash-message {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-1rem);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .flash-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .flash-message.success {
+            background: var(--success-color);
+        }
+
+        .flash-message.error {
+            background: var(--danger-color);
+        }
+
+        .flash-message i {
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            transition: all var(--transition-speed);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background: var(--success-hover);
+            border-color: var(--success-hover);
+        }
+
+        .form-control {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all var(--transition-speed);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+            }
+
             .info-card {
-                padding: 14px 6px 10px 6px;
+                padding: 1rem;
             }
+
             .info-label {
-                min-width: 90px;
-                font-size: 0.98em;
+                min-width: 120px;
+                font-size: 0.95rem;
             }
+
+            .additional-col {
+                min-width: 140px;
+            }
+
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .info-card {
+                padding: 0.75rem;
+            }
+
+            .info-label {
+                min-width: 100px;
+                font-size: 0.9rem;
+            }
+
+            .copy-btn {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.85rem;
+            }
+
             .additional-section {
-                padding: 10px 6px 8px 6px;
+                padding: 0.75rem;
             }
-            .additional-row {
-                gap: 8px;
+
+            .additional-col {
+                min-width: 120px;
+                padding: 0.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container py-5">
-        <h1 class="text-center mb-4">US Info Generator Tool</h1>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div id="flash-message" class="flash-message"></div>
+    
+    <div class="container">
+        <h1 class="page-title">US Info Generator Tool</h1>
         
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label for="count" class="form-label">Number of entries to generate:</label>
+                <div class="card bg-transparent border-0">
+                    <div class="card-body p-0">
+                        <div class="mb-4">
+                            <label for="count" class="form-label">
+                                <i class="fas fa-hashtag"></i> Number of entries to generate
+                            </label>
                             <input type="number" class="form-control" id="count" min="1" max="10" value="1">
                         </div>
-                        <button class="btn btn-primary" onclick="generateInfo()">Generate Info</button>
+                        <button class="btn btn-primary w-100" onclick="generateInfo()">
+                            <i class="fas fa-magic"></i> Generate Info
+                        </button>
                     </div>
                 </div>
 
                 <div class="loading text-center">
-                    <div class="spinner-border loading-spinner text-primary" role="status">
+                    <div class="spinner-border loading-spinner" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    <p class="mt-2">Generating information...</p>
+                    <p class="mt-3">Generating information...</p>
                 </div>
 
                 <div class="progress-container">
@@ -246,109 +571,154 @@
             const card = document.createElement('div');
             card.className = 'info-card';
             card.innerHTML = `
-                <h5>Info #${index + 1}</h5>
+                <h5><i class="fas fa-user-circle"></i> Info #${index + 1}</h5>
                 <div class="info-item">
-                    <span class="info-label">First Name:</span> 
+                    <span class="info-label"><i class="fas fa-user"></i> First Name:</span> 
                     <span>${info.firstName}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.firstName}')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.firstName}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">Last Name:</span> 
+                    <span class="info-label"><i class="fas fa-user"></i> Last Name:</span> 
                     <span>${info.lastName}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.lastName}')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.lastName}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 ${info.suffix ? `
                 <div class="info-item">
-                    <span class="info-label">Suffix:</span> 
+                    <span class="info-label"><i class="fas fa-user-tag"></i> Suffix:</span> 
                     <span>${info.suffix}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.suffix}')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.suffix}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 ` : ''}
                 <div class="info-item">
-                    <span class="info-label">Pronoun:</span> 
+                    <span class="info-label"><i class="fas fa-venus-mars"></i> Pronoun:</span> 
                     <span>${info.pronoun || ''}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.pronoun || ''}')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.pronoun || ''}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">Email:</span> 
-                    <span style="color:#0d6efd; font-weight:600;">${info.email}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.email}')">Copy</button>
+                    <span class="info-label"><i class="fas fa-envelope"></i> Email:</span> 
+                    <span style="color:var(--primary-color); font-weight:600;">${info.email}</span>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.email}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">Email Password:</span> 
-                    <span style="color:#b35400;">${info.emailPassword}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.emailPassword}')">Copy</button>
+                    <span class="info-label"><i class="fas fa-key"></i> Email Password:</span> 
+                    <span style="color:var(--danger-color);">${info.emailPassword}</span>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.emailPassword}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">Password:</span> 
-                    <span style="color:#b35400;">${info.password}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.password}')">Copy</button>
+                    <span class="info-label"><i class="fas fa-lock"></i> Password:</span> 
+                    <span style="color:var(--danger-color);">${info.password}</span>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.password}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">Birth Date:</span> 
+                    <span class="info-label"><i class="fas fa-calendar"></i> Birth Date:</span> 
                     <span>${info.birthDate}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.birthDate}')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.birthDate}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">SSN:</span> 
+                    <span class="info-label"><i class="fas fa-id-card"></i> SSN:</span> 
                     <span style="letter-spacing:2px;">${info.ssn}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.ssn}')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.ssn}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">Country:</span> 
+                    <span class="info-label"><i class="fas fa-flag"></i> Country:</span> 
                     <span>United States of America</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, 'United States of America')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard(this, 'United States of America')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">Number & Street:</span> 
+                    <span class="info-label"><i class="fas fa-map-marker-alt"></i> Number & Street:</span> 
                     <span>${info.address}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.address}')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.address}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">Apartment:</span> 
+                    <span class="info-label"><i class="fas fa-building"></i> Apartment:</span> 
                     <span>${info.apartment || ''}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.apartment || ''}')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.apartment || ''}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">City:</span> 
+                    <span class="info-label"><i class="fas fa-city"></i> City:</span> 
                     <span>${info.city}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.city}')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.city}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">State:</span> 
+                    <span class="info-label"><i class="fas fa-map"></i> State:</span> 
                     <span>${info.stateName} (${info.stateCode})</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.stateName} (${info.stateCode})')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.stateName} (${info.stateCode})')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">Zip Code:</span> 
+                    <span class="info-label"><i class="fas fa-mail-bulk"></i> Zip Code:</span> 
                     <span>${info.zipCode}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.zipCode}')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.zipCode}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">Cell Phone:</span> 
-                    <span style="color:#198754;">${info.phone}</span>
-                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.phone}')">Copy</button>
+                    <span class="info-label"><i class="fas fa-phone"></i> Cell Phone:</span> 
+                    <span style="color:var(--success-color);">${info.phone}</span>
+                    <button class="copy-btn" onclick="copyToClipboard(this, '${info.phone}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
-                <div class="mt-3 mb-2">
-                    <button class="btn btn-success btn-sm" onclick="getCode(${index})">Get Verification Code</button>
-                    <button class="btn btn-primary btn-sm ms-2" onclick="saveAccount(${index})">Save Info</button>
+                <div class="mt-4 mb-3">
+                    <button class="btn btn-success btn-sm" onclick="getCode(${index})">
+                        <i class="fas fa-envelope-open-text"></i> Get Verification Code
+                    </button>
+                    <button class="btn btn-primary btn-sm ms-2" onclick="saveAccount(${index})">
+                        <i class="fas fa-save"></i> Save Info
+                    </button>
                 </div>
                 <div id="verification-${index}" class="mt-2"></div>
                 ${info.additionalInfo ? `
                 <div class="additional-section">
-                    <div class="additional-section-title">Additional Info</div>
+                    <div class="additional-section-title">
+                        <i class="fas fa-info-circle"></i> Additional Info
+                    </div>
                     <div class="additional-row">
                         <div class="additional-col">
-                            <span class="info-label">First Name:</span> ${info.additionalInfo.firstName}
-                            <button class="copy-btn" onclick="copyToClipboard(this, '${info.additionalInfo.firstName}')">Copy</button>
+                            <span class="info-label"><i class="fas fa-user"></i> First Name:</span> ${info.additionalInfo.firstName}
+                            <button class="copy-btn" onclick="copyToClipboard(this, '${info.additionalInfo.firstName}')">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
                         </div>
                         <div class="additional-col">
-                            <span class="info-label">Last Name:</span> ${info.additionalInfo.lastName}
-                            <button class="copy-btn" onclick="copyToClipboard(this, '${info.additionalInfo.lastName}')">Copy</button>
+                            <span class="info-label"><i class="fas fa-user"></i> Last Name:</span> ${info.additionalInfo.lastName}
+                            <button class="copy-btn" onclick="copyToClipboard(this, '${info.additionalInfo.lastName}')">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
                         </div>
                         <div class="additional-col">
-                            <span class="info-label">Email:</span> <span style="color:#198754;">${info.additionalInfo.email}</span>
-                            <button class="copy-btn" onclick="copyToClipboard(this, '${info.additionalInfo.email}')">Copy</button>
+                            <span class="info-label"><i class="fas fa-envelope"></i> Email:</span> 
+                            <span style="color:var(--success-color);">${info.additionalInfo.email}</span>
+                            <button class="copy-btn" onclick="copyToClipboard(this, '${info.additionalInfo.email}')">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -359,16 +729,16 @@
 
         function copyToClipboard(button, text) {
             navigator.clipboard.writeText(text).then(() => {
-                const originalText = button.textContent;
-                button.textContent = 'Copied!';
+                const originalContent = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
                 button.classList.add('copied');
                 setTimeout(() => {
-                    button.textContent = originalText;
+                    button.innerHTML = originalContent;
                     button.classList.remove('copied');
                 }, 1500);
             }).catch(err => {
                 console.error('Failed to copy text: ', err);
-                alert('Failed to copy text to clipboard');
+                showFlashMessage('Failed to copy text to clipboard', 'error');
             });
         }
 
@@ -420,10 +790,22 @@
             }
         }
 
+        function showFlashMessage(message, type = 'success') {
+            const flashMessage = document.getElementById('flash-message');
+            const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+            flashMessage.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
+            flashMessage.className = `flash-message ${type}`;
+            flashMessage.classList.add('show');
+            
+            setTimeout(() => {
+                flashMessage.classList.remove('show');
+            }, 3000);
+        }
+
         async function saveAccount(index) {
             if (!generatedInfo[index]) {
                 console.error('No info found for index:', index);
-                alert('Error: No account information found');
+                showFlashMessage('Error: No account information found', 'error');
                 return;
             }
 
@@ -465,13 +847,41 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    alert('Account saved successfully!');
+                    showFlashMessage('Account saved successfully!');
+                    // Mark the card as saved
+                    const card = document.querySelector(`.info-card:nth-child(${index + 1})`);
+                    if (card) {
+                        card.classList.add('saved');
+                    }
                 } else {
                     throw new Error(result.error || 'Failed to save account');
                 }
             } catch (error) {
-                alert('Error saving account: ' + error.message);
+                showFlashMessage('Error saving account: ' + error.message, 'error');
             }
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle i');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.removeAttribute('data-theme');
+                themeToggle.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            document.querySelector('.theme-toggle i').className = 'fas fa-sun';
         }
     </script>
 </body>
